@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="doc-title">منصة ذاكر — رفيقك الدراسي</title>
+
+  <!-- Google Fonts: Cairo & Tajawal for crisp Arabic legibility -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+            tajawal: ['Tajawal', 'sans-serif'],
+          },
+          colors: {
+            paper: '#f7f8fc',
+            surface: '#ffffff',
+            navyDeep: '#111b3b',
+            navyMid: '#1d2d5c',
+            slateInk: '#475569',
+            goldAccent: '#d97706',
+            goldBright: '#f59e0b',
+            goldSoft: '#fef3c7',
+            indigoSoft: '#eef2ff',
+          },
+          boxShadow: {
+            scholar: '0 12px 30px -12px rgba(17, 27, 59, 0.10)',
+            scholarLift: '0 20px 40px -16px rgba(29, 45, 92, 0.16)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --accent-primary: #d97706;
+      --accent-secondary: #f59e0b;
+      --accent-soft: #fef3c7;
+      --accent-ring: rgba(217, 119, 6, 0.25);
+    }
+
+    body[data-theme="amber"] {
+      --accent-primary: #d97706;
+      --accent-secondary: #f59e0b;
+      --accent-soft: #fef3c7;
+      --accent-ring: rgba(217, 119, 6, 0.25);
+    }
+
+    body[data-theme="emerald"] {
+      --accent-primary: #0d9488;
+      --accent-secondary: #14b8a6;
+      --accent-soft: #ccfbf1;
+      --accent-ring: rgba(13, 148, 136, 0.25);
+    }
+
+    body[data-theme="royal"] {
+      --accent-primary: #4f46e5;
+      --accent-secondary: #6366f1;
+      --accent-soft: #e0e7ff;
+      --accent-ring: rgba(79, 70, 229, 0.25);
+    }
+
+    body {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      background-color: #f7f8fc;
+      color: #111b3b;
+      overflow-x: hidden;
+    }
+
+    p, .font-body {
+      font-family: 'Tajawal', 'Cairo', sans-serif;
+    }
+
+    .accent-bg {
+      background-color: var(--accent-primary);
+    }
+    .accent-bg-hover:hover {
+      background-color: var(--accent-secondary);
+    }
+    .accent-text {
+      color: var(--accent-primary);
+    }
+    .accent-soft-bg {
+      background-color: var(--accent-soft);
+    }
+    .accent-border {
+      border-color: var(--accent-primary);
+    }
+
+    .academic-grid {
+      background-image:
+        linear-gradient(to right, rgba(17, 27, 59, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(17, 27, 59, 0.035) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    /* 3D Flashcard Flip Mechanics */
+    .flashcard-scene {
+      perspective: 1200px;
+    }
+    .flashcard-inner {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .flashcard-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+    .flashcard-face {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .flashcard-back {
+      transform: rotateY(180deg);
+    }
+
+    .drawer-slide {
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #eef1f8;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #b8c2d8;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #1d2d5c;
+    }
+  </style>
+</head>
+
+<body data-theme="amber" class="bg-paper text-navyDeep antialiased selection:bg-amber-200 selection:text-navyDeep min-h-screen flex flex-col">
+
+  <!-- ===================================================================== -->
+  <!-- 1. TOP NAVIGATION BAR (RTL)                                           -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-0 z-30 backdrop-blur-xl bg-white/90 border-b border-navyDeep/10 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
+      <!-- Brand Logo -->
+      <a href="#top" class="flex items-center gap-2.5 sm:gap-3 min-w-0 group">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-navyDeep to-navyMid flex items-center justify-center text-white shadow-scholar shrink-0 group-hover:scale-105 transition-transform">
+          <!-- Open Book & Spark Icon -->
+          <svg class="w-5 h-5" style="color: var(--accent-secondary);" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <div id="nav-brand-name" class="text-sm sm:text-lg font-extrabold text-navyDeep truncate">منصة ذاكر</div>
+          <div class="text-[11px] text-slateInk hidden sm:block truncate">رفيقك الدراسي للتنظيم والتركيز</div>
+        </div>
+      </a>
+
+      <!-- Quick Section Links (Desktop) -->
+      <nav aria-label="أقسام المنصة الدراسية" class="hidden xl:flex items-center gap-5 text-xs sm:text-sm font-bold text-slateInk">
+        <a href="#methods-section" class="hover:text-navyDeep transition-colors">أساليب المذاكرة</a>
+        <a href="#planner-section" class="hover:text-navyDeep transition-colors">جدول المهام</a>
+        <a href="#timer-section" class="hover:text-navyDeep transition-colors">مؤقت التركيز</a>
+        <a href="#flashcards-section" class="hover:text-navyDeep transition-colors">بطاقات المراجعة</a>
+        <a href="#resources-section" class="hover:text-navyDeep transition-colors">مصادر المواد</a>
+      </nav>
+
+      <!-- Right Pill Stats + Customize/Export Button + Mobile Menu -->
+      <div class="flex items-center gap-2 shrink-0">
+        <!-- Quick Stats Pill -->
+        <div class="hidden md:flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-indigoSoft/80 border border-navyDeep/10 text-xs font-extrabold text-navyDeep">
+          <span title="المهام المكتملة">✓ <span id="pill-completed-tasks">0</span>/<span id="pill-total-tasks">0</span> مهام</span>
+          <span class="w-px h-3.5 bg-navyDeep/15"></span>
+          <span title="دقائق التركيز المنجزة" class="accent-text">⏱ <span id="pill-focus-minutes">0</span> دقيقة</span>
+        </div>
+
+        <button
+          type="button"
+          id="open-drawer-btn"
+          aria-controls="customization-drawer"
+          aria-expanded="false"
+          class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-navyDeep hover:bg-navyMid text-white font-bold text-xs sm:text-sm shadow-scholar transition-all active:scale-95 cursor-pointer"
+        >
+          <svg class="w-4 h-4 shrink-0" style="color: var(--accent-secondary);" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span>تخصيص وتصدير HTML</span>
+        </button>
+
+        <button
+          type="button"
+          id="mobile-nav-toggle"
+          aria-label="فتح قائمة التنقل"
+          aria-expanded="false"
+          class="xl:hidden p-2 rounded-xl bg-indigoSoft text-navyDeep hover:bg-navyDeep/10 transition-colors cursor-pointer"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Responsive Mobile / Tablet Navigation Menu -->
+    <div id="mobile-nav-panel" class="hidden xl:hidden bg-white border-t border-navyDeep/10 px-4 py-3 space-y-1 text-sm font-bold text-navyDeep">
+      <div class="flex items-center justify-between px-3 py-2 mb-1 rounded-xl bg-indigoSoft/70 text-xs">
+        <span>إنجاز اليوم: <strong id="mobile-pill-tasks">0/0</strong> مهام</span>
+        <span class="accent-text font-extrabold">تركيز: <strong id="mobile-pill-minutes">0</strong> د</span>
+      </div>
+      <a href="#methods-section" class="mobile-link block px-3 py-2 rounded-xl hover:bg-paper">أساليب المذاكرة</a>
+      <a href="#planner-section" class="mobile-link block px-3 py-2 rounded-xl hover:bg-paper">جدول المهام</a>
+      <a href="#timer-section" class="mobile-link block px-3 py-2 rounded-xl hover:bg-paper">مؤقت التركيز</a>
+      <a href="#flashcards-section" class="mobile-link block px-3 py-2 rounded-xl hover:bg-paper">بطاقات المراجعة</a>
+      <a href="#resources-section" class="mobile-link block px-3 py-2 rounded-xl hover:bg-paper">مصادر المواد</a>
+    </div>
+  </header>
+
+  <main id="top" class="flex-1">
+
+    <!-- ===================================================================== -->
+    <!-- 2. HERO SECTION                                                       -->
+    <!-- ===================================================================== -->
+    <section class="relative academic-grid border-b border-navyDeep/10 pt-12 pb-16 sm:pt-20 sm:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <div class="w-96 h-96 rounded-full opacity-15 blur-3xl absolute -top-24 -left-24 pointer-events-none" style="background-color: var(--accent-secondary);"></div>
+      <div class="w-80 h-80 rounded-full bg-navyMid/10 blur-3xl absolute -bottom-24 -right-24 pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-right">
+          <!-- Greeting Badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-navyDeep/12 shadow-sm text-xs sm:text-sm font-bold text-navyDeep">
+            <span class="w-2.5 h-2.5 rounded-full" style="background-color: var(--accent-primary);"></span>
+            <span id="hero-greeting-text">أهلاً بك يا طالب العلم — استعد لمذاكرة ذكية ومنظمة</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl lg:text-[3.35rem] font-extrabold text-navyDeep leading-[1.2] tracking-tight">
+            ذاكر بذكاء، راجع بفعالية، وابقَ في <span class="accent-text">تركيزٍ عميق</span> دون تشتت
+          </h1>
+
+          <p class="font-body text-base sm:text-xl text-slateInk leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            منصة دراسية متكاملة تجمع بين جدولة المهام اليومية، مؤقت التركيز بومودورو، بطاقات الاستذكار النشط، وأساليب التعلّم المثبتة لمساعدتك على تنظيم وقتك بثقة واستقرار.
+          </p>
+
+          <!-- Primary CTA Buttons -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
+            <a
+              href="#timer-section"
+              style="background-color: var(--accent-primary);"
+              class="px-6 py-3.5 rounded-2xl hover:opacity-95 text-white font-extrabold text-sm sm:text-base shadow-scholarLift transition-all active:scale-95"
+            >
+              ابدأ جلسة تركيز الآن
+            </a>
+            <a
+              href="#planner-section"
+              class="px-6 py-3.5 rounded-2xl bg-white hover:bg-indigoSoft/70 text-navyDeep font-extrabold text-sm sm:text-base border border-navyDeep/15 shadow-sm transition-all active:scale-95"
+            >
+              نظّم جدول مذاكرتك
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero Study Snapshot Card -->
+        <div class="lg:col-span-5">
+          <div class="rounded-3xl bg-white border border-navyDeep/12 p-6 sm:p-8 shadow-scholarLift space-y-6">
+            <div class="flex items-center justify-between border-b border-navyDeep/10 pb-4">
+              <div>
+                <span class="text-xs font-extrabold accent-text block">لوحة المتابعة الدراسية</span>
+                <h2 class="text-lg sm:text-xl font-extrabold text-navyDeep mt-0.5">ملخص إنجازك اليوم</h2>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-indigoSoft text-navyMid text-xs font-extrabold">نظام الدراسة المنظّم</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="p-4 rounded-2xl bg-paper border border-navyDeep/10">
+                <span class="text-xs font-bold text-slateInk block">المهام المنجزة</span>
+                <div class="text-2xl sm:text-3xl font-extrabold text-navyDeep mt-1">
+                  <span id="hero-tasks-done">0</span><span class="text-base text-slateInk font-semibold">/<span id="hero-tasks-total">0</span></span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-navyDeep/10 mt-3 overflow-hidden">
+                  <div id="hero-tasks-bar" class="h-full rounded-full transition-all duration-300" style="width: 0%; background-color: var(--accent-primary);"></div>
+                </div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-paper border border-navyDeep/10">
+                <span class="text-xs font-bold text-slateInk block">وقت التركيز المنجز</span>
+                <div class="text-2xl sm:text-3xl font-extrabold accent-text mt-1">
+                  <span id="hero-focus-mins">0</span> <span class="text-sm font-bold text-navyDeep">دقيقة</span>
+                </div>
+                <p class="text-xs text-slateInk mt-2">جلسات مكتملة: <strong id="hero-sessions-count" class="text-navyDeep">0</strong></p>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl accent-soft-bg border border-amber-500/20 text-xs sm:text-sm font-body text-navyDeep leading-relaxed">
+              💡 <strong>نصيحة سريعة:</strong> ابدأ بمهمة واحدة واضحة المدة خلال جلسة تركيز مدتها 25 أو 45 دقيقة، ثم راجع الأفكار الأساسية عبر البطاقات دون النظر إلى الكتاب.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 3. CORE STUDY PILLARS / METHODS SECTION                               -->
+    <!-- ===================================================================== -->
+    <section id="methods-section" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-navyDeep/10">
+      <div class="max-w-7xl mx-auto">
+        <div class="max-w-2xl mb-12">
+          <span class="inline-block px-3.5 py-1 rounded-full accent-soft-bg accent-text text-xs font-extrabold">منهجية التعلّم الفعّال</span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-navyDeep mt-2.5">ركائز المذاكرة الذكية</h2>
+          <p class="font-body text-slateInk text-base sm:text-lg mt-2.5 leading-relaxed">
+            بدل الاعتماد على القراءة المتكررة المجهِدة، تساعدك هذه الأساليب الأربع على الفهم العميق وتثبيت المعلومات على المدى الطويل.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Pillar 1: Active Recall -->
+          <article class="rounded-3xl bg-paper border border-navyDeep/10 hover:border-navyMid/35 p-6 flex flex-col justify-between shadow-scholar hover:shadow-scholarLift transition-all duration-300 hover:-translate-y-1">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-indigoSoft text-navyMid flex items-center justify-center font-extrabold text-lg mb-5">
+                🧠
+              </div>
+              <h3 class="text-lg sm:text-xl font-extrabold text-navyDeep mb-2">الاستذكار النشط</h3>
+              <p class="text-xs font-bold accent-text mb-2.5">Active Recall</p>
+              <p class="font-body text-sm text-slateInk leading-relaxed">
+                اختبر نفسك في المفاهيم والقوانين والأسئلة من الذاكرة قبل مراجعة الحل، لأن استرجاع المعلومة يقوّي الروابط الذهنية أكثر من إعادة قراءتها.
+              </p>
+            </div>
+            <div class="mt-5 pt-3.5 border-t border-navyDeep/10 text-xs font-bold text-navyMid">
+              تطبيق عملي في البطاقات التعليمية
+            </div>
+          </article>
+
+          <!-- Pillar 2: Spaced Repetition -->
+          <article class="rounded-3xl bg-paper border border-navyDeep/10 hover:border-navyMid/35 p-6 flex flex-col justify-between shadow-scholar hover:shadow-scholarLift transition-all duration-300 hover:-translate-y-1">
+            <div>
+              <div class="w-12 h-12 rounded-2xl accent-soft-bg accent-text flex items-center justify-center font-extrabold text-lg mb-5">
+                🔁
+              </div>
+              <h3 class="text-lg sm:text-xl font-extrabold text-navyDeep mb-2">التكرار المتباعد</h3>
+              <p class="text-xs font-bold accent-text mb-2.5">Spaced Repetition</p>
+              <p class="font-body text-sm text-slateInk leading-relaxed">
+                وزّع مراجعة الدروس على فترات زمنية متباعدة ومدروسة (بعد يوم، ثم ثلاثة أيام، ثم أسبوع) لمقاومة منحنى النسيان وتثبيت الحفظ بهدوء.
+              </p>
+            </div>
+            <div class="mt-5 pt-3.5 border-t border-navyDeep/10 text-xs font-bold text-navyMid">
+              مناسب للحفظ والمراجعة الدورية
+            </div>
+          </article>
+
+          <!-- Pillar 3: Task Breakdown & Planning -->
+          <article class="rounded-3xl bg-paper border border-navyDeep/10 hover:border-navyMid/35 p-6 flex flex-col justify-between shadow-scholar hover:shadow-scholarLift transition-all duration-300 hover:-translate-y-1">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-indigoSoft text-navyMid flex items-center justify-center font-extrabold text-lg mb-5">
+                📋
+              </div>
+              <h3 class="text-lg sm:text-xl font-extrabold text-navyDeep mb-2">تقسيم المهام والتخطيط</h3>
+              <p class="text-xs font-bold accent-text mb-2.5">Structured Planning</p>
+              <p class="font-body text-sm text-slateInk leading-relaxed">
+                حوّل الفصول الدراسية الطويلة إلى مهام صغيرة محددة المدة والأولوية، لتعرف ما ستنجزه اليوم وتبدأ بخطوات واضحة دون تسويف.
+              </p>
+            </div>
+            <div class="mt-5 pt-3.5 border-t border-navyDeep/10 text-xs font-bold text-navyMid">
+              متاح في جدول المهام أدناه
+            </div>
+          </article>
+
+          <!-- Pillar 4: Deep Focus -->
+          <article class="rounded-3xl bg-paper border border-navyDeep/10 hover:border-navyMid/35 p-6 flex flex-col justify-between shadow-scholar hover:shadow-scholarLift transition-all duration-300 hover:-translate-y-1">
+            <div>
+              <div class="w-12 h-12 rounded-2xl accent-soft-bg accent-text flex items-center justify-center font-extrabold text-lg mb-5">
+                🎯
+              </div>
+              <h3 class="text-lg sm:text-xl font-extrabold text-navyDeep mb-2">التركيز العميق</h3>
+              <p class="text-xs font-bold accent-text mb-2.5">Deep Focus</p>
+              <p class="font-body text-sm text-slateInk leading-relaxed">
+                خصّص فترات زمنية مركزة خالية من التنبيهات يتخللها استراحات قصيرة منتظمة للحفاظ على صفاء الذهن ومنع الإرهاق الذهني المبكر.
+              </p>
+            </div>
+            <div class="mt-5 pt-3.5 border-t border-navyDeep/10 text-xs font-bold text-navyMid">
+              مدعوم بمؤقت التركيز بومودورو
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 4. INTERACTIVE STUDY PLANNER & TASK MANAGER                           -->
+    <!-- ===================================================================== -->
+    <section id="planner-section" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 academic-grid border-b border-navyDeep/10">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+          <div>
+            <span class="inline-block px-3.5 py-1 rounded-full bg-indigoSoft text-navyMid text-xs font-extrabold">التنظيم اليومي والأسبوعي</span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-navyDeep mt-2">جدول المهام الدراسية</h2>
+            <p class="font-body text-slateInk text-base mt-1.5">
+              أضف مهامك حسب المادة والأولوية والمدة التقديرية، وتابع إنجازها مع حفظ تلقائي في المتصفح.
+            </p>
+          </div>
+          <div class="text-xs sm:text-sm font-bold text-navyDeep bg-white px-4 py-2.5 rounded-2xl border border-navyDeep/10 shadow-sm self-start md:self-auto">
+            إجمالي الوقت المقدر للمهام: <span id="planner-total-est" class="accent-text font-extrabold">0</span> دقيقة
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Add Study Task Form -->
+          <div class="lg:col-span-4 rounded-3xl bg-white border border-navyDeep/12 p-6 shadow-scholar">
+            <h3 class="text-lg font-extrabold text-navyDeep border-b border-navyDeep/10 pb-3.5 mb-4">إضافة مهمة دراسية</h3>
+            <form id="add-task-form" class="space-y-4 text-sm">
+              <div>
+                <label for="task-title-input" class="block text-xs font-extrabold text-navyDeep mb-1.5">عنوان المهمة أو الدرس</label>
+                <input
+                  type="text"
+                  id="task-title-input"
+                  required
+                  placeholder="مثال: حل تمارين الدوال المثلثية"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep"
+                />
+              </div>
+
+              <div>
+                <label for="task-category-select" class="block text-xs font-extrabold text-navyDeep mb-1.5">المادة / التصنيف</label>
+                <select
+                  id="task-category-select"
+                  class="w-full px-3.5 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep font-bold"
+                >
+                  <option value="العلوم والمنطق">العلوم والمنطق</option>
+                  <option value="اللغات والرياضيات">اللغات والرياضيات</option>
+                  <option value="مراجعة وحفظ">مراجعة وحفظ</option>
+                </select>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label for="task-priority-select" class="block text-xs font-extrabold text-navyDeep mb-1.5">الأولوية</label>
+                  <select
+                    id="task-priority-select"
+                    class="w-full px-3 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep font-bold text-xs"
+                  >
+                    <option value="عالية">عالية</option>
+                    <option value="متوسطة" selected>متوسطة</option>
+                    <option value="منخفضة">منخفضة</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="task-minutes-input" class="block text-xs font-extrabold text-navyDeep mb-1.5">المدة (دقيقة)</label>
+                  <input
+                    type="number"
+                    id="task-minutes-input"
+                    min="5"
+                    max="240"
+                    step="5"
+                    value="30"
+                    required
+                    class="w-full px-3 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep font-bold text-xs"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                style="background-color: var(--accent-primary);"
+                class="w-full py-3 px-4 rounded-xl hover:opacity-95 text-white font-extrabold text-sm shadow-scholar transition-all active:scale-[0.99] cursor-pointer"
+              >
+                + إضافة إلى الجدول
+              </button>
+            </form>
+          </div>
+
+          <!-- Filter Tabs & Task List -->
+          <div class="lg:col-span-8 space-y-5">
+            <!-- Category Filter Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-navyDeep/10 shadow-sm">
+              <div role="tablist" aria-label="تصفية المهام الدراسية" class="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="true"
+                  data-task-filter="الكل"
+                  class="task-filter-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-navyDeep text-white transition-all cursor-pointer"
+                >
+                  الكل
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  data-task-filter="العلوم والمنطق"
+                  class="task-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-paper text-slateInk hover:bg-indigoSoft hover:text-navyDeep transition-all cursor-pointer"
+                >
+                  العلوم والمنطق
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  data-task-filter="اللغات والرياضيات"
+                  class="task-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-paper text-slateInk hover:bg-indigoSoft hover:text-navyDeep transition-all cursor-pointer"
+                >
+                  اللغات والرياضيات
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  data-task-filter="مراجعة وحفظ"
+                  class="task-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-paper text-slateInk hover:bg-indigoSoft hover:text-navyDeep transition-all cursor-pointer"
+                >
+                  مراجعة وحفظ
+                </button>
+              </div>
+
+              <button
+                type="button"
+                id="clear-completed-tasks-btn"
+                class="text-xs font-bold text-slateInk hover:text-rose-600 px-2.5 py-1.5 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer"
+              >
+                حذف المكتملة
+              </button>
+            </div>
+
+            <!-- Tasks Container -->
+            <div id="tasks-list-container" class="space-y-3">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 5. INTERACTIVE FOCUS TIMER (POMODORO)                                 -->
+    <!-- ===================================================================== -->
+    <section id="timer-section" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-navyDeep/10">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <span class="inline-block px-3.5 py-1 rounded-full accent-soft-bg accent-text text-xs font-extrabold">إدارة الوقت والانتباه</span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-navyDeep mt-2">مؤقت التركيز (بومودورو)</h2>
+          <p class="font-body text-slateInk text-base mt-2">
+            اختر مدة التركيز والاستراحة المناسبة لمادتك الدراسية، وابدأ جلسة مركزة تُسجَّل تلقائياً ضمن دقائق تركيزك المنجزة.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <!-- Circular Timer Visual Card -->
+          <div class="lg:col-span-6 rounded-3xl bg-paper border border-navyDeep/12 p-6 sm:p-10 shadow-scholarLift flex flex-col items-center text-center">
+            <!-- Mode Pill -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-navyDeep/10 text-xs font-extrabold text-navyDeep mb-6">
+              <span id="timer-mode-dot" class="w-2.5 h-2.5 rounded-full" style="background-color: var(--accent-primary);"></span>
+              <span id="timer-mode-label">جلسة تركيز دراسي</span>
+            </div>
+
+            <!-- Circular SVG Progress Ring -->
+            <div class="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center mb-6">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 220 220">
+                <circle
+                  cx="110"
+                  cy="110"
+                  r="96"
+                  fill="none"
+                  stroke="#e2e8f0"
+                  stroke-width="12"
+                />
+                <circle
+                  id="timer-progress-ring"
+                  cx="110"
+                  cy="110"
+                  r="96"
+                  fill="none"
+                  stroke="var(--accent-primary)"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                  stroke-dasharray="603.19"
+                  stroke-dashoffset="0"
+                  class="transition-all duration-300"
+                />
+              </svg>
+
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <div id="timer-display" class="text-4xl sm:text-5xl font-extrabold text-navyDeep tracking-tight" dir="ltr">25:00</div>
+                <div id="timer-substatus" class="text-xs font-bold text-slateInk mt-1.5">جاهز للبدء</div>
+              </div>
+            </div>
+
+            <!-- Controls: Start / Pause / Reset -->
+            <div class="flex flex-wrap items-center justify-center gap-3 w-full">
+              <button
+                type="button"
+                id="timer-toggle-btn"
+                style="background-color: var(--accent-primary);"
+                class="px-7 py-3 rounded-2xl hover:opacity-95 text-white font-extrabold text-sm sm:text-base shadow-scholar transition-all active:scale-95 cursor-pointer"
+              >
+                بدء المؤقت
+              </button>
+              <button
+                type="button"
+                id="timer-reset-btn"
+                class="px-5 py-3 rounded-2xl bg-white hover:bg-indigoSoft text-navyDeep font-bold text-sm border border-navyDeep/15 transition-all active:scale-95 cursor-pointer"
+              >
+                إعادة ضبط
+              </button>
+              <button
+                type="button"
+                id="timer-switch-mode-btn"
+                class="px-4 py-3 rounded-2xl bg-indigoSoft/80 hover:bg-indigoSoft text-navyMid font-bold text-xs sm:text-sm transition-all cursor-pointer"
+              >
+                تبديل إلى استراحة
+              </button>
+            </div>
+          </div>
+
+          <!-- Presets, Custom Durations & Session Log Card -->
+          <div class="lg:col-span-6 space-y-6">
+            <div class="rounded-3xl bg-white border border-navyDeep/12 p-6 sm:p-8 shadow-scholar space-y-6">
+              <h3 class="text-lg font-extrabold text-navyDeep border-b border-navyDeep/10 pb-3">إعدادات المدة والأنماط</h3>
+
+              <!-- Quick Presets -->
+              <div class="grid grid-cols-3 gap-2.5">
+                <button
+                  type="button"
+                  data-preset-focus="25"
+                  data-preset-break="5"
+                  class="preset-btn py-2.5 px-3 rounded-xl bg-navyDeep text-white font-extrabold text-xs sm:text-sm transition-all cursor-pointer"
+                >
+                  25 / 5 دقائق
+                </button>
+                <button
+                  type="button"
+                  data-preset-focus="45"
+                  data-preset-break="10"
+                  class="preset-btn py-2.5 px-3 rounded-xl bg-paper hover:bg-indigoSoft text-navyDeep font-bold text-xs sm:text-sm border border-navyDeep/15 transition-all cursor-pointer"
+                >
+                  45 / 10 دقائق
+                </button>
+                <button
+                  type="button"
+                  data-preset-focus="50"
+                  data-preset-break="15"
+                  class="preset-btn py-2.5 px-3 rounded-xl bg-paper hover:bg-indigoSoft text-navyDeep font-bold text-xs sm:text-sm border border-navyDeep/15 transition-all cursor-pointer"
+                >
+                  50 / 15 دقيقة
+                </button>
+              </div>
+
+              <!-- Custom Focus & Break Inputs -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="custom-focus-min" class="block text-xs font-extrabold text-navyDeep mb-1.5">مدة التركيز (دقائق)</label>
+                  <input
+                    type="number"
+                    id="custom-focus-min"
+                    min="1"
+                    max="180"
+                    value="25"
+                    class="w-full px-4 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep font-bold text-sm"
+                  />
+                </div>
+                <div>
+                  <label for="custom-break-min" class="block text-xs font-extrabold text-navyDeep mb-1.5">مدة الاستراحة (دقائق)</label>
+                  <input
+                    type="number"
+                    id="custom-break-min"
+                    min="1"
+                    max="60"
+                    value="5"
+                    class="w-full px-4 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep font-bold text-sm"
+                  />
+                </div>
+              </div>
+
+              <!-- Sessions & Logged Focus Minutes Summary -->
+              <div class="grid grid-cols-2 gap-4 pt-2 border-t border-navyDeep/10">
+                <div class="p-4 rounded-2xl bg-paper border border-navyDeep/10">
+                  <span class="text-xs font-bold text-slateInk block">جلسات التركيز المكتملة</span>
+                  <div id="timer-completed-sessions" class="text-2xl font-extrabold text-navyDeep mt-1">0</div>
+                </div>
+                <div class="p-4 rounded-2xl accent-soft-bg border border-amber-500/20">
+                  <span class="text-xs font-bold text-navyDeep block">إجمالي دقائق التركيز</span>
+                  <div class="text-2xl font-extrabold accent-text mt-1"><span id="timer-logged-minutes">0</span> د</div>
+                </div>
+              </div>
+
+              <!-- Gentle Audio/Visual Alert Banner inside Timer -->
+              <div id="timer-alert-banner" class="hidden p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm font-bold"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 6. INTERACTIVE FLASHCARDS / ACTIVE RECALL DECK                       -->
+    <!-- ===================================================================== -->
+    <section id="flashcards-section" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 academic-grid border-b border-navyDeep/10">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+          <div>
+            <span class="inline-block px-3.5 py-1 rounded-full accent-soft-bg accent-text text-xs font-extrabold">اختبر ذاكرتك بفاعلية</span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-navyDeep mt-2">بطاقات الاستذكار النشط</h2>
+            <p class="font-body text-slateInk text-base mt-1.5">
+              اقلب البطاقة لاستعراض الإجابة أو الملخص، وصنّفها بين «أتقنتها» و«أحتاج مراجعة»، أو أضف بطاقاتك الخاصة.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            id="toggle-add-card-form-btn"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-navyDeep hover:bg-navyMid text-white font-extrabold text-sm shadow-scholar transition-all cursor-pointer shrink-0"
+          >
+            <span>+ إضافة بطاقة دراسية</span>
+          </button>
+        </div>
+
+        <!-- Collapsible Add Custom Flashcard Form -->
+        <div id="add-card-panel" class="hidden rounded-3xl bg-white border border-navyDeep/15 p-6 mb-8 shadow-scholar">
+          <h3 class="text-base sm:text-lg font-extrabold text-navyDeep mb-4">إنشاء بطاقة استذكار جديدة</h3>
+          <form id="add-flashcard-form" class="grid grid-cols-1 md:grid-cols-12 gap-4 text-sm">
+            <div class="md:col-span-4">
+              <label for="card-topic-select" class="block text-xs font-extrabold text-navyDeep mb-1.5">الموضوع / المادة</label>
+              <select
+                id="card-topic-select"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep font-bold"
+              >
+                <option value="العلوم والمنطق">العلوم والمنطق</option>
+                <option value="اللغات والرياضيات">اللغات والرياضيات</option>
+                <option value="مراجعة وحفظ">مراجعة وحفظ</option>
+              </select>
+            </div>
+            <div class="md:col-span-8">
+              <label for="card-front-input" class="block text-xs font-extrabold text-navyDeep mb-1.5">السؤال أو المصطلح (الوجه الأمامي)</label>
+              <input
+                type="text"
+                id="card-front-input"
+                required
+                placeholder="مثال: ما الفرق بين السرعة المتوسطة والسرعة اللحظية؟"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep"
+              />
+            </div>
+            <div class="md:col-span-12">
+              <label for="card-back-input" class="block text-xs font-extrabold text-navyDeep mb-1.5">الإجابة أو الملخص (الوجه الخلفي)</label>
+              <textarea
+                id="card-back-input"
+                rows="2"
+                required
+                placeholder="اكتب الإجابة الواضحة أو القاعدة المختصرة..."
+                class="w-full px-3.5 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep resize-none"
+              ></textarea>
+            </div>
+            <div class="md:col-span-12 flex justify-end gap-2.5">
+              <button
+                type="button"
+                id="cancel-add-card-btn"
+                class="px-4 py-2 rounded-xl bg-paper hover:bg-indigoSoft text-slateInk font-bold text-xs cursor-pointer"
+              >
+                إلغاء
+              </button>
+              <button
+                type="submit"
+                style="background-color: var(--accent-primary);"
+                class="px-5 py-2 rounded-xl hover:opacity-95 text-white font-extrabold text-xs shadow-sm cursor-pointer"
+              >
+                حفظ البطاقة
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Topic Filter & Mastery Summary Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div role="tablist" aria-label="تصفية البطاقات حسب الموضوع" class="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-card-topic="الكل"
+              class="card-topic-btn px-4 py-2 rounded-xl text-xs font-extrabold bg-navyDeep text-white transition-all cursor-pointer"
+            >
+              الكل
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-card-topic="العلوم والمنطق"
+              class="card-topic-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slateInk hover:bg-indigoSoft border border-navyDeep/10 transition-all cursor-pointer"
+            >
+              العلوم والمنطق
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-card-topic="اللغات والرياضيات"
+              class="card-topic-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slateInk hover:bg-indigoSoft border border-navyDeep/10 transition-all cursor-pointer"
+            >
+              اللغات والرياضيات
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-card-topic="مراجعة وحفظ"
+              class="card-topic-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slateInk hover:bg-indigoSoft border border-navyDeep/10 transition-all cursor-pointer"
+            >
+              مراجعة وحفظ
+            </button>
+          </div>
+
+          <div class="flex items-center gap-3 text-xs font-extrabold">
+            <span class="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200">
+              أتقنتها: <span id="mastered-cards-count">0</span>
+            </span>
+            <span class="px-3 py-1.5 rounded-xl accent-soft-bg accent-text border border-amber-500/20">
+              أحتاج مراجعة: <span id="review-cards-count">0</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Flashcards Grid -->
+        <div id="flashcards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SUBJECT RESOURCES & STUDY GUIDE SECTION                               -->
+    <!-- ===================================================================== -->
+    <section id="resources-section" class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white border-b border-navyDeep/10">
+      <div class="max-w-7xl mx-auto">
+        <div class="max-w-2xl mb-10">
+          <span class="inline-block px-3.5 py-1 rounded-full bg-indigoSoft text-navyMid text-xs font-extrabold">نماذج تنظيم واستذكار المواد</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-navyDeep mt-2">كيف تذاكر كل مادة بأسلوب مناسب؟</h2>
+          <p class="font-body text-slateInk text-sm sm:text-base mt-1.5">
+            إرشادات عملية مختصرة تساعدك على مواءمة طريقة المذاكرة مع طبيعة كل مجال دراسي.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="rounded-3xl bg-paper border border-navyDeep/10 p-6 space-y-3 shadow-scholar">
+            <div class="text-xs font-extrabold accent-text">العلوم والمنطق</div>
+            <h3 class="text-lg font-extrabold text-navyDeep">افهم السبب والنتيجة قبل الحفظ</h3>
+            <p class="font-body text-sm text-slateInk leading-relaxed">
+              اربط القوانين والمفاهيم بأمثلة حياتية واضحة، وارسم مخططات مبسطة للعلاقات بين المتغيرات ثم اختبر نفسك في مسائل متنوعة.
+            </p>
+          </div>
+
+          <div class="rounded-3xl bg-paper border border-navyDeep/10 p-6 space-y-3 shadow-scholar">
+            <div class="text-xs font-extrabold text-navyMid">اللغات والرياضيات</div>
+            <h3 class="text-lg font-extrabold text-navyDeep">التدريب المستمر خطوة بخطوة</h3>
+            <p class="font-body text-sm text-slateInk leading-relaxed">
+              في الرياضيات خصّص وقتاً لحل التمارين بنفسك دون النظر إلى الحل المبكر، وفي اللغات اقرأ بانتظام ودوّن المفردات الجديدة في جمل واضحة.
+            </p>
+          </div>
+
+          <div class="rounded-3xl bg-paper border border-navyDeep/10 p-6 space-y-3 shadow-scholar">
+            <div class="text-xs font-extrabold accent-text">مراجعة وحفظ</div>
+            <h3 class="text-lg font-extrabold text-navyDeep">لخّص بصوتك ثم راجع على فترات</h3>
+            <p class="font-body text-sm text-slateInk leading-relaxed">
+              قسّم النصوص إلى عناوين فرعية، واشرح الفكرة بكلماتك الخاصة، وراجع البطاقات التي تحتاج إلى تثبيت في جلسات قصيرة متكررة.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- 8. FOOTER WITH STUDY TIPS & QUICK LINKS                               -->
+  <!-- ===================================================================== -->
+  <footer class="bg-navyDeep text-gray-300 py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto"></div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- 7. SLIDE-OVER CUSTOMIZATION & HTML EXPORT DRAWER                      -->
+  <!-- ===================================================================== -->
+  <div id="drawer-backdrop" class="fixed inset-0 bg-navyDeep/60 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
+
+  <aside
+    id="customization-drawer"
+    aria-label="لوحة تخصيص منصة ذاكر وتصدير HTML"
+    class="fixed top-0 bottom-0 left-0 w-full max-w-md bg-white border-r border-navyDeep/15 z-50 drawer-slide -translate-x-full flex flex-col shadow-2xl"
+  >
+    <div class="px-5 py-4 bg-paper border-b border-navyDeep/10 flex items-center justify-between">
+      <div>
+        <h2 class="text-base sm:text-lg font-extrabold text-navyDeep">تخصيص المنصة وتصدير HTML</h2>
+        <p class="text-xs text-slateInk">عدّل العنوان والترحيب واللون المميز فوراً</p>
+      </div>
+      <button
+        type="button"
+        id="close-drawer-btn"
+        aria-label="إغلاق لوحة التخصيص"
+        class="p-2 rounded-xl bg-white hover:bg-indigoSoft text-navyDeep transition-colors cursor-pointer"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-5 overflow-y-auto flex-1 space-y-5 text-sm">
+      <div>
+        <label for="cust-platform-title" class="block text-xs font-extrabold text-navyDeep mb-1.5">عنوان المنصة</label>
+        <input
+          type="text"
+          id="cust-platform-title"
+          class="w-full px-3.5 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep font-bold"
+        />
+      </div>
+
+      <div>
+        <label for="cust-student-greeting" class="block text-xs font-extrabold text-navyDeep mb-1.5">اسم الطالب / عبارة الترحيب</label>
+        <input
+          type="text"
+          id="cust-student-greeting"
+          placeholder="مثال: أهلاً بك يا سارة — استعد لمذاكرة ذكية ومنظمة"
+          class="w-full px-3.5 py-2.5 rounded-xl bg-paper border border-navyDeep/15 focus:border-navyMid focus:outline-none text-navyDeep"
+        />
+      </div>
+
+      <div>
+        <span class="block text-xs font-extrabold text-navyDeep mb-2">السمة اللونية للمنصة</span>
+        <div class="grid grid-cols-3 gap-2.5">
+          <button
+            type="button"
+            data-theme-choice="amber"
+            class="theme-choice-btn py-2.5 px-3 rounded-xl border-2 border-amber-600 bg-amber-50 text-amber-900 font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span class="w-3 h-3 rounded-full bg-amber-600"></span>
+            <span>ذهبي دافئ</span>
+          </button>
+          <button
+            type="button"
+            data-theme-choice="emerald"
+            class="theme-choice-btn py-2.5 px-3 rounded-xl border border-navyDeep/15 bg-paper text-navyDeep font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span class="w-3 h-3 rounded-full bg-teal-600"></span>
+            <span>زمردي هادئ</span>
+          </button>
+          <button
+            type="button"
+            data-theme-choice="royal"
+            class="theme-choice-btn py-2.5 px-3 rounded-xl border border-navyDeep/15 bg-paper text-navyDeep font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
+            <span>نيلي ملكي</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-navyDeep/10">
+        <button
+          type="button"
+          id="reset-study-data-btn"
+          class="w-full py-2.5 px-4 rounded-xl bg-paper hover:bg-rose-50 text-slateInk hover:text-rose-700 font-bold text-xs border border-navyDeep/10 transition-colors cursor-pointer"
+        >
+          إعادة تعيين البيانات الافتراضية
+        </button>
+      </div>
+    </div>
+
+    <div class="p-4 bg-paper border-t border-navyDeep/10 space-y-2.5">
+      <button
+        type="button"
+        id="copy-html-direct-btn"
+        style="background-color: var(--accent-primary);"
+        class="w-full py-2.5 px-4 rounded-xl hover:opacity-95 text-white font-extrabold text-xs sm:text-sm shadow-scholar transition-all cursor-pointer"
+      >
+        نسخ كود HTML
+      </button>
+      <button
+        type="button"
+        id="download-html-direct-btn"
+        class="w-full py-2.5 px-4 rounded-xl bg-navyDeep hover:bg-navyMid text-white font-extrabold text-xs sm:text-sm transition-all cursor-pointer"
+      >
+        تحميل ملف index.html
+      </button>
+      <div id="drawer-export-status" class="hidden px-3.5 py-2 rounded-xl text-xs font-bold text-center"></div>
+    </div>
+  </aside>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION LOGIC (PLANNER, POMODORO, FLASHCARDS, CUSTOMIZER)        -->
+  <!-- ===================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      const STORAGE_KEY = 'dhakir_study_platform_v1';
+
+      const DEFAULT_STATE = {
+        platformTitle: 'منصة ذاكر — رفيقك الدراسي',
+        greetingText: 'أهلاً بك يا طالب العلم — استعد لمذاكرة ذكية ومنظمة',
+        theme: 'amber',
+        taskFilter: 'الكل',
+        cardTopicFilter: 'الكل',
+        focusMinutes: 25,
+        breakMinutes: 5,
+        completedSessions: 0,
+        loggedFocusMinutes: 0,
+        tasks: [
+          {
+            id: 't-1',
+            title: 'مراجعة قوانين الحركة وحل ثلاث مسائل تطبيقية',
+            category: 'العلوم والمنطق',
+            priority: 'عالية',
+            minutes: 40,
+            completed: false
+          },
+          {
+            id: 't-2',
+            title: 'التدرب على حل معادلات وأسئلة فهم المقروء',
+            category: 'اللغات والرياضيات',
+            priority: 'متوسطة',
+            minutes: 35,
+            completed: false
+          },
+          {
+            id: 't-3',
+            title: 'مراجعة ملخص الفصل السابق وتسميع المفاهيم من الذاكرة',
+            category: 'مراجعة وحفظ',
+            priority: 'عالية',
+            minutes: 25,
+            completed: true
+          }
+        ],
+        flashcards: [
+          {
+            id: 'c-1',
+            topic: 'العلوم والمنطق',
+            front: 'ما المقصود بالقصور الذاتي؟',
+            back: 'ميل الجسم إلى مقاومة أي تغيّر في حالته الحركية (سكون أو حركة منتظمة في خط مستقيم) ما لم تؤثر عليه قوة محصلة خارجية.',
+            status: 'review'
+          },
+          {
+            id: 'c-2',
+            topic: 'اللغات والرياضيات',
+            front: 'متى يكون المثلث قائم الزاوية وفق نظرية فيثاغورس؟',
+            back: 'عندما يكون مربع طول الضلع الأطول (الوتر) مساوياً لمجموع مربعي طولي الضلعين الآخرين (أ² + ب² = جـ²).',
+            status: 'mastered'
+          },
+          {
+            id: 'c-3',
+            topic: 'مراجعة وحفظ',
+            front: 'لماذا يُعد الاستذكار النشط أكثر فاعلية من إعادة القراءة؟',
+            back: 'لأنه يدرّب الدماغ على استخراج المعلومات وتحديد الثغرات الحقيقية في الفهم بدلاً من الإحساس الوهمي بالألفة مع النص.',
+            status: 'review'
+          }
+        ]
+      };
+
+      function cloneDefault() {
+        return JSON.parse(JSON.stringify(DEFAULT_STATE));
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return cloneDefault();
+          const parsed = JSON.parse(raw);
+          return {
+            ...cloneDefault(),
+            ...parsed,
+            tasks: Array.isArray(parsed.tasks) ? parsed.tasks : cloneDefault().tasks,
+            flashcards: Array.isArray(parsed.flashcards) ? parsed.flashcards : cloneDefault().flashcards
+          };
+        } catch (e) {
+          return cloneDefault();
+        }
+      }
+
+      let state = loadState();
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          // Ignore storage quota errors safely
+        }
+      }
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      // DOM elements
+      const el = {
+        docTitle: document.getElementById('doc-title'),
+        navBrandName: document.getElementById('nav-brand-name'),
+        heroGreetingText: document.getElementById('hero-greeting-text'),
+
+        // Pills & Hero stats
+        pillCompletedTasks: document.getElementById('pill-completed-tasks'),
+        pillTotalTasks: document.getElementById('pill-total-tasks'),
+        pillFocusMinutes: document.getElementById('pill-focus-minutes'),
+        mobilePillTasks: document.getElementById('mobile-pill-tasks'),
+        mobilePillMinutes: document.getElementById('mobile-pill-minutes'),
+        heroTasksDone: document.getElementById('hero-tasks-done'),
+        heroTasksTotal: document.getElementById('hero-tasks-total'),
+        heroTasksBar: document.getElementById('hero-tasks-bar'),
+        heroFocusMins: document.getElementById('hero-focus-mins'),
+        heroSessionsCount: document.getElementById('hero-sessions-count'),
+
+        // Mobile nav
+        mobileNavToggle: document.getElementById('mobile-nav-toggle'),
+        mobileNavPanel: document.getElementById('mobile-nav-panel'),
+
+        // Planner
+        addTaskForm: document.getElementById('add-task-form'),
+        taskTitleInput: document.getElementById('task-title-input'),
+        taskCategorySelect: document.getElementById('task-category-select'),
+        taskPrioritySelect: document.getElementById('task-priority-select'),
+        taskMinutesInput: document.getElementById('task-minutes-input'),
+        taskFilterBtns: document.querySelectorAll('.task-filter-btn'),
+        clearCompletedTasksBtn: document.getElementById('clear-completed-tasks-btn'),
+        tasksListContainer: document.getElementById('tasks-list-container'),
+        plannerTotalEst: document.getElementById('planner-total-est'),
+
+        // Timer
+        timerModeDot: document.getElementById('timer-mode-dot'),
+        timerModeLabel: document.getElementById('timer-mode-label'),
+        timerProgressRing: document.getElementById('timer-progress-ring'),
+        timerDisplay: document.getElementById('timer-display'),
+        timerSubstatus: document.getElementById('timer-substatus'),
+        timerToggleBtn: document.getElementById('timer-toggle-btn'),
+        timerResetBtn: document.getElementById('timer-reset-btn'),
+        timerSwitchModeBtn: document.getElementById('timer-switch-mode-btn'),
+        presetBtns: document.querySelectorAll('.preset-btn'),
+        customFocusMin: document.getElementById('custom-focus-min'),
+        customBreakMin: document.getElementById('custom-break-min'),
+        timerCompletedSessions: document.getElementById('timer-completed-sessions'),
+        timerLoggedMinutes: document.getElementById('timer-logged-minutes'),
+        timerAlertBanner: document.getElementById('timer-alert-banner'),
+
+        // Flashcards
+        toggleAddCardFormBtn: document.getElementById('toggle-add-card-form-btn'),
+        addCardPanel: document.getElementById('add-card-panel'),
+        addFlashcardForm: document.getElementById('add-flashcard-form'),
+        cancelAddCardBtn: document.getElementById('cancel-add-card-btn'),
+        cardTopicSelect: document.getElementById('card-topic-select'),
+        cardFrontInput: document.getElementById('card-front-input'),
+        cardBackInput: document.getElementById('card-back-input'),
+        cardTopicBtns: document.querySelectorAll('.card-topic-btn'),
+        masteredCardsCount: document.getElementById('mastered-cards-count'),
+        reviewCardsCount: document.getElementById('review-cards-count'),
+        flashcardsGrid: document.getElementById('flashcards-grid'),
+
+        // Customization Drawer
+        openDrawerBtn: document.getElementById('open-drawer-btn'),
+        closeDrawerBtn: document.getElementById('close-drawer-btn'),
+        drawerBackdrop: document.getElementById('drawer-backdrop'),
+        customizationDrawer: document.getElementById('customization-drawer'),
+        custPlatformTitle: document.getElementById('cust-platform-title'),
+        custStudentGreeting: document.getElementById('cust-student-greeting'),
+        themeChoiceBtns: document.querySelectorAll('.theme-choice-btn'),
+        resetStudyDataBtn: document.getElementById('reset-study-data-btn'),
+        copyHtmlDirectBtn: document.getElementById('copy-html-direct-btn'),
+        downloadHtmlDirectBtn: document.getElementById('download-html-direct-btn'),
+        drawerExportStatus: document.getElementById('drawer-export-status')
+      };
+
+      // =====================================================================
+      // BRANDING, THEME & STATS SYNC
+      // =====================================================================
+      function applyBrandingAndTheme() {
+        document.body.setAttribute('data-theme', state.theme || 'amber');
+        const shortBrand = (state.platformTitle || 'منصة ذاكر').split('—')[0].trim() || 'منصة ذاكر';
+        el.docTitle.textContent = state.platformTitle || 'منصة ذاكر — رفيقك الدراسي';
+        el.navBrandName.textContent = shortBrand;
+        el.heroGreetingText.textContent = state.greetingText || 'أهلاً بك يا طالب العلم — استعد لمذاكرة ذكية ومنظمة';
+
+        el.themeChoiceBtns.forEach((btn) => {
+          const isSelected = btn.getAttribute('data-theme-choice') === state.theme;
+          btn.className = isSelected
+            ? 'theme-choice-btn py-2.5 px-3 rounded-xl border-2 border-navyDeep bg-indigoSoft text-navyDeep font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer'
+            : 'theme-choice-btn py-2.5 px-3 rounded-xl border border-navyDeep/15 bg-paper text-slateInk font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer';
+        });
+      }
+
+      function updateStatsDisplay() {
+        const total = state.tasks.length;
+        const done = state.tasks.filter((t) => t.completed).length;
+        const remainingMinutes = state.tasks
+          .filter((t) => !t.completed)
+          .reduce((sum, t) => sum + (Number(t.minutes) || 0), 0);
+
+        el.pillCompletedTasks.textContent = done;
+        el.pillTotalTasks.textContent = total;
+        el.pillFocusMinutes.textContent = state.loggedFocusMinutes;
+
+        el.mobilePillTasks.textContent = `${done}/${total}`;
+        el.mobilePillMinutes.textContent = state.loggedFocusMinutes;
+
+        el.heroTasksDone.textContent = done;
+        el.heroTasksTotal.textContent = total;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+        el.heroTasksBar.style.width = `${pct}%`;
+
+        el.heroFocusMins.textContent = state.loggedFocusMinutes;
+        el.heroSessionsCount.textContent = state.completedSessions;
+        el.plannerTotalEst.textContent = remainingMinutes;
+
+        el.timerCompletedSessions.textContent = state.completedSessions;
+        el.timerLoggedMinutes.textContent = state.loggedFocusMinutes;
+      }
+
+      // =====================================================================
+      // STUDY PLANNER RENDERING & INTERACTIONS
+      // =====================================================================
+      function getPriorityBadge(priority) {
+        if (priority === 'عالية') return 'bg-rose-50 text-rose-700 border border-rose-200';
+        if (priority === 'منخفضة') return 'bg-slate-100 text-slate-700 border border-slate-200';
+        return 'bg-amber-50 text-amber-800 border border-amber-200';
+      }
+
+      function renderTasks() {
+        el.taskFilterBtns.forEach((btn) => {
+          const active = btn.getAttribute('data-task-filter') === state.taskFilter;
+          btn.setAttribute('aria-selected', String(active));
+          btn.className = active
+            ? 'task-filter-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-navyDeep text-white transition-all cursor-pointer'
+            : 'task-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-paper text-slateInk hover:bg-indigoSoft hover:text-navyDeep transition-all cursor-pointer';
+        });
+
+        const visibleTasks =
+          state.taskFilter === 'الكل'
+            ? state.tasks
+            : state.tasks.filter((t) => t.category === state.taskFilter);
+
+        if (!visibleTasks.length) {
+          el.tasksListContainer.innerHTML = `
+            <div class="rounded-3xl bg-white border border-navyDeep/10 p-8 text-center text-sm text-slateInk">
+              لا توجد مهام في هذا التصنيف حالياً. يمكنك إضافة مهمة جديدة من النموذج المجاور.
+            </div>
+          `;
+        } else {
+          el.tasksListContainer.innerHTML = visibleTasks
+            .map(
+              (task) => `
+                <div class="rounded-2xl bg-white border ${task.completed ? 'border-emerald-200/80 bg-emerald-50/20' : 'border-navyDeep/10'} p-4 sm:p-5 flex items-center justify-between gap-4 shadow-sm hover:shadow-scholar transition-all">
+                  <div class="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
+                    <input
+                      type="checkbox"
+                      data-toggle-task="${escapeHtml(task.id)}"
+                      ${task.completed ? 'checked' : ''}
+                      aria-label="تحديد حالة المهمة ${escapeHtml(task.title)}"
+                      class="task-checkbox w-5 h-5 rounded-lg border-navyDeep/30 text-navyDeep focus:ring-0 cursor-pointer mt-0.5 sm:mt-0 shrink-0"
+                    />
+                    <div class="min-w-0 flex-1">
+                      <div class="font-bold text-sm sm:text-base ${task.completed ? 'line-through text-slateInk' : 'text-navyDeep'} break-words">
+                        ${escapeHtml(task.title)}
+                      </div>
+                      <div class="flex flex-wrap items-center gap-2 mt-1.5 text-[11px] sm:text-xs">
+                        <span class="px-2.5 py-0.5 rounded-lg bg-indigoSoft text-navyMid font-bold">${escapeHtml(task.category)}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg font-bold ${getPriorityBadge(task.priority)}">أولوية ${escapeHtml(task.priority)}</span>
+                        <span class="text-slateInk font-semibold">⏱ ${Number(task.minutes) || 25} دقيقة</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    data-delete-task="${escapeHtml(task.id)}"
+                    aria-label="حذف المهمة ${escapeHtml(task.title)}"
+                    class="delete-task-btn p-2 rounded-xl text-slateInk hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer shrink-0"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              `
+            )
+            .join('');
+        }
+
+        updateStatsDisplay();
+      }
+
+      // =====================================================================
+      // POMODORO FOCUS TIMER ENGINE
+      // =====================================================================
+      const RING_CIRCUMFERENCE = 2 * Math.PI * 96; // ~603.19
+      let timerMode = 'focus'; // 'focus' | 'break'
+      let remainingSeconds = state.focusMinutes * 60;
+      let totalSecondsForMode = state.focusMinutes * 60;
+      let timerInterval = null;
+      let isTimerRunning = false;
+
+      function getModeDurationSeconds() {
+        const mins = timerMode === 'focus' ? state.focusMinutes : state.breakMinutes;
+        return Math.max(60, (Number(mins) || 25) * 60);
+      }
+
+      function syncTimerDurationsFromState(resetClock) {
+        el.customFocusMin.value = state.focusMinutes;
+        el.customBreakMin.value = state.breakMinutes;
+        if (resetClock) {
+          stopTimerInterval();
+          totalSecondsForMode = getModeDurationSeconds();
+          remainingSeconds = totalSecondsForMode;
+          el.timerSubstatus.textContent = 'جاهز للبدء';
+        }
+        renderTimerDisplay();
+      }
+
+      function renderTimerDisplay() {
+        const mins = Math.floor(remainingSeconds / 60);
+        const secs = remainingSeconds % 60;
+        el.timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+        const ratio = totalSecondsForMode > 0 ? remainingSeconds / totalSecondsForMode : 0;
+        const offset = RING_CIRCUMFERENCE * (1 - Math.max(0, Math.min(1, ratio)));
+        el.timerProgressRing.style.strokeDasharray = RING_CIRCUMFERENCE.toFixed(2);
+        el.timerProgressRing.style.strokeDashoffset = offset.toFixed(2);
+
+        if (timerMode === 'focus') {
+          el.timerModeLabel.textContent = 'جلسة تركيز دراسي';
+          el.timerModeDot.style.backgroundColor = 'var(--accent-primary)';
+          el.timerProgressRing.style.stroke = 'var(--accent-primary)';
+          el.timerSwitchModeBtn.textContent = 'تبديل إلى استراحة';
+        } else {
+          el.timerModeLabel.textContent = 'فترة استراحة واسترخاء';
+          el.timerModeDot.style.backgroundColor = '#0d9488';
+          el.timerProgressRing.style.stroke = '#0d9488';
+          el.timerSwitchModeBtn.textContent = 'تبديل إلى تركيز';
+        }
+
+        el.timerToggleBtn.textContent = isTimerRunning ? 'إيقاف مؤقت' : 'بدء المؤقت';
+      }
+
+      function showTimerBanner(message) {
+        el.timerAlertBanner.textContent = message;
+        el.timerAlertBanner.classList.remove('hidden');
+      }
+
+      function stopTimerInterval() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+        isTimerRunning = false;
+      }
+
+      function handleTimerComplete() {
+        stopTimerInterval();
+        if (timerMode === 'focus') {
+          state.completedSessions += 1;
+          state.loggedFocusMinutes += Number(state.focusMinutes) || 25;
+          saveState();
+          updateStatsDisplay();
+          showTimerBanner(`أحسنت! أتممت جلسة تركيز (${state.focusMinutes} دقيقة). حان وقت الاستراحة أو بدء جلسة جديدة.`);
+          timerMode = 'break';
+        } else {
+          showTimerBanner('انتهت فترة الاستراحة؛ يمكنك الآن بدء جلسة تركيز جديدة بكل نشاط.');
+          timerMode = 'focus';
+        }
+        totalSecondsForMode = getModeDurationSeconds();
+        remainingSeconds = totalSecondsForMode;
+        el.timerSubstatus.textContent = 'اكتملت الجلسة';
+        renderTimerDisplay();
+      }
+
+      function startTimer() {
+        if (isTimerRunning) return;
+        isTimerRunning = true;
+        el.timerSubstatus.textContent = timerMode === 'focus' ? 'جاري التركيز...' : 'في استراحة...';
+        renderTimerDisplay();
+
+        timerInterval = setInterval(() => {
+          remainingSeconds -= 1;
+          if (remainingSeconds <= 0) {
+            remainingSeconds = 0;
+            renderTimerDisplay();
+            handleTimerComplete();
+          } else {
+            renderTimerDisplay();
+          }
+        }, 1000);
+      }
+
+      function resetTimer() {
+        stopTimerInterval();
+        totalSecondsForMode = getModeDurationSeconds();
+        remainingSeconds = totalSecondsForMode;
+        el.timerSubstatus.textContent = 'تمت إعادة الضبط';
+        renderTimerDisplay();
+      }
+
+      // =====================================================================
+      // FLASHCARDS / ACTIVE RECALL RENDERING & INTERACTIONS
+      // =====================================================================
+      function renderFlashcards() {
+        el.cardTopicBtns.forEach((btn) => {
+          const active = btn.getAttribute('data-card-topic') === state.cardTopicFilter;
+          btn.setAttribute('aria-selected', String(active));
+          btn.className = active
+            ? 'card-topic-btn px-4 py-2 rounded-xl text-xs font-extrabold bg-navyDeep text-white transition-all cursor-pointer'
+            : 'card-topic-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slateInk hover:bg-indigoSoft border border-navyDeep/10 transition-all cursor-pointer';
+        });
+
+        const masteredTotal = state.flashcards.filter((c) => c.status === 'mastered').length;
+        const reviewTotal = state.flashcards.length - masteredTotal;
+        el.masteredCardsCount.textContent = masteredTotal;
+        el.reviewCardsCount.textContent = reviewTotal;
+
+        const filteredCards =
+          state.cardTopicFilter === 'الكل'
+            ? state.flashcards
+            : state.flashcards.filter((c) => c.topic === state.cardTopicFilter);
+
+        if (!filteredCards.length) {
+          el.flashcardsGrid.innerHTML = `
+            <div class="col-span-full rounded-3xl bg-white border border-navyDeep/10 p-8 text-center text-sm text-slateInk">
+              لا توجد بطاقات في هذا الموضوع حالياً. اضغط على «+ إضافة بطاقة دراسية» لإنشاء بطاقة جديدة.
+            </div>
+          `;
+          return;
+        }
+
+        el.flashcardsGrid.innerHTML = filteredCards
+          .map((card) => {
+            const isMastered = card.status === 'mastered';
+            return `
+              <div class="space-y-3">
+                <div class="flashcard-scene h-64">
+                  <div id="inner-${escapeHtml(card.id)}" class="flashcard-inner w-full h-full cursor-pointer" data-flip-id="${escapeHtml(card.id)}">
+                    <!-- Front Face -->
+                    <div class="flashcard-face absolute inset-0 rounded-3xl bg-white border border-navyDeep/12 p-6 shadow-scholar flex flex-col justify-between">
+                      <div class="flex items-center justify-between gap-2">
+                        <span class="px-3 py-1 rounded-full bg-indigoSoft text-navyMid text-xs font-extrabold">${escapeHtml(card.topic)}</span>
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${isMastered ? 'bg-emerald-50 text-emerald-700' : 'accent-soft-bg accent-text'}">
+                          ${isMastered ? 'أتقنتها' : 'أحتاج مراجعة'}
+                        </span>
+                      </div>
+
+                      <div class="my-auto text-center px-2">
+                        <div class="text-[11px] font-bold text-slateInk mb-2">السؤال / المفهوم</div>
+                        <h3 class="text-base sm:text-lg font-extrabold text-navyDeep leading-relaxed">${escapeHtml(card.front)}</h3>
+                      </div>
+
+                      <div class="text-center text-xs font-bold accent-text">
+                        اضغط لقلب البطاقة وكشف الإجابة ↻
+                      </div>
+                    </div>
+
+                    <!-- Back Face -->
+                    <div class="flashcard-back flashcard-face absolute inset-0 rounded-3xl bg-gradient-to-br from-navyDeep to-navyMid text-white p-6 shadow-scholarLift flex flex-col justify-between">
+                      <div class="flex items-center justify-between gap-2 border-b border-white/15 pb-3">
+                        <span class="text-xs font-extrabold" style="color: var(--accent-secondary);">الإجابة والملخص</span>
+                        <span class="text-[11px] text-gray-300">${escapeHtml(card.topic)}</span>
+                      </div>
+
+                      <div class="my-auto overflow-y-auto py-2">
+                        <p class="font-body text-sm sm:text-base text-gray-100 leading-relaxed">${escapeHtml(card.back)}</p>
+                      </div>
+
+                      <div class="text-center text-xs font-semibold text-gray-300 pt-2 border-t border-white/15">
+                        اضغط للعودة إلى السؤال ↺
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card Mastery & Delete Controls -->
+                <div class="flex items-center justify-between gap-2 px-1">
+                  <div class="flex items-center gap-2 flex-1">
+                    <button
+                      type="button"
+                      data-status-id="${escapeHtml(card.id)}"
+                      data-next-status="mastered"
+                      class="card-status-btn flex-1 py-2 px-3 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                        isMastered
+                          ? 'bg-emerald-600 text-white shadow-sm'
+                          : 'bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-200'
+                      }"
+                    >
+                      ✓ أتقنتها
+                    </button>
+                    <button
+                      type="button"
+                      data-status-id="${escapeHtml(card.id)}"
+                      data-next-status="review"
+                      class="card-status-btn flex-1 py-2 px-3 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                        !isMastered
+                          ? 'accent-bg text-white shadow-sm'
+                          : 'bg-white hover:bg-amber-50 text-navyDeep border border-navyDeep/15'
+                      }"
+                    >
+                      ↻ أحتاج مراجعة
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    data-delete-card="${escapeHtml(card.id)}"
+                    aria-label="حذف البطاقة"
+                    class="delete-card-btn p-2 rounded-xl bg-white hover:bg-rose-50 text-slateInk hover:text-rose-600 border border-navyDeep/10 transition-colors cursor-pointer"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+      }
+
+      // =====================================================================
+      // CUSTOMIZATION DRAWER & HTML EXPORT
+      // =====================================================================
+      function setDrawerState(open) {
+        if (open) {
+          el.custPlatformTitle.value = state.platformTitle;
+          el.custStudentGreeting.value = state.greetingText;
+          el.drawerExportStatus.classList.add('hidden');
+          el.drawerBackdrop.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            el.drawerBackdrop.classList.remove('opacity-0');
+            el.customizationDrawer.classList.remove('-translate-x-full');
+          });
+          el.openDrawerBtn.setAttribute('aria-expanded', 'true');
+        } else {
+          el.customizationDrawer.classList.add('-translate-x-full');
+          el.drawerBackdrop.classList.add('opacity-0');
+          el.openDrawerBtn.setAttribute('aria-expanded', 'false');
+          setTimeout(() => {
+            if (el.customizationDrawer.classList.contains('-translate-x-full')) {
+              el.drawerBackdrop.classList.add('hidden');
+            }
+          }, 320);
+        }
+      }
+
+      function showDrawerStatus(msg, isError) {
+        el.drawerExportStatus.textContent = msg;
+        el.drawerExportStatus.className = isError
+          ? 'px-3.5 py-2 rounded-xl text-xs font-bold text-center bg-rose-50 text-rose-700 border border-rose-200'
+          : 'px-3.5 py-2 rounded-xl text-xs font-bold text-center bg-emerald-50 text-emerald-700 border border-emerald-200';
+      }
+
+      function generateExportableHtml() {
+        const safeTitle = escapeHtml(state.platformTitle || 'منصة ذاكر — رفيقك الدراسي');
+        const safeGreeting = escapeHtml(state.greetingText || 'أهلاً بك يا طالب العلم');
+        const accentHex =
+          state.theme === 'emerald' ? '#0d9488' : state.theme === 'royal' ? '#4f46e5' : '#d97706';
+        const year = new Date().getFullYear();
+
+        const tasksPreviewHtml = state.tasks
+          .map(
+            (t) =>
+              `<li class="p-3.5 rounded-xl bg-white border border-[#111b3b]/10 flex items-center justify-between gap-2 text-xs sm:text-sm">
+                <span class="${t.completed ? 'line-through text-[#475569]' : 'font-bold text-[#111b3b]'}">${escapeHtml(t.title)}</span>
+                <span class="text-xs font-bold text-[#1d2d5c] shrink-0">${escapeHtml(t.category)} • ${Number(t.minutes) || 25} د</span>
+              </li>`
+          )
+          .join('\n          ');
+
+        const cardsPreviewHtml = state.flashcards
+          .map(
+            (c) =>
+              `<div class="rounded-2xl bg-white border border-[#111b3b]/10 p-5 space-y-2">
+                <span class="text-xs font-extrabold" style="color: ${accentHex};">${escapeHtml(c.topic)}</span>
+                <h3 class="font-extrabold text-[#111b3b] text-base">${escapeHtml(c.front)}</h3>
+                <p class="text-sm text-[#475569] leading-relaxed">${escapeHtml(c.back)}</p>
+              </div>`
+          )
+          .join('\n          ');
+
+        return `<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${safeTitle}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Cairo', 'Tajawal', sans-serif; background-color: #f7f8fc; color: #111b3b; }
+    p { font-family: 'Tajawal', 'Cairo', sans-serif; }
+  </style>
+</head>
+<body class="bg-[#f7f8fc] text-[#111b3b] antialiased min-h-screen">
+  <header class="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-[#111b3b]/10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <span class="font-extrabold text-base sm:text-lg text-[#111b3b]">${safeTitle}</span>
+      <nav class="hidden md:flex items-center gap-6 text-xs sm:text-sm font-bold text-[#475569]">
+        <a href="#methods" class="hover:text-[#111b3b]">أساليب المذاكرة</a>
+        <a href="#tasks" class="hover:text-[#111b3b]">المهام الدراسية</a>
+        <a href="#cards" class="hover:text-[#111b3b]">بطاقات المراجعة</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <section class="rounded-3xl bg-white border border-[#111b3b]/10 p-6 sm:p-10 space-y-4">
+      <div class="inline-block px-3.5 py-1 rounded-full text-xs font-extrabold text-white" style="background-color: ${accentHex};">${safeGreeting}</div>
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-[#111b3b] leading-tight">ذاكر بذكاء، راجع بفعالية، وابقَ في تركيزٍ عميق</h1>
+      <p class="text-sm sm:text-lg text-[#475569] leading-relaxed max-w-3xl">منصة دراسية منظمة تدعم الاستذكار النشط، التكرار المتباعد، وتقسيم المهام اليومية بوضوح.</p>
+    </section>
+
+    <section id="methods" class="space-y-6">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-[#111b3b]">أساليب المذاكرة الفعّالة</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="rounded-2xl bg-white border border-[#111b3b]/10 p-5 space-y-1.5">
+          <h3 class="font-extrabold text-[#111b3b]">الاستذكار النشط</h3>
+          <p class="text-xs text-[#475569] leading-relaxed">اختبر استرجاعك للمعلومات من الذاكرة قبل مراجعة الحل.</p>
+        </div>
+        <div class="rounded-2xl bg-white border border-[#111b3b]/10 p-5 space-y-1.5">
+          <h3 class="font-extrabold text-[#111b3b]">التكرار المتباعد</h3>
+          <p class="text-xs text-[#475569] leading-relaxed">وزّع المراجعة على فترات زمنية متباعدة لتثبيت الحفظ.</p>
+        </div>
+        <div class="rounded-2xl bg-white border border-[#111b3b]/10 p-5 space-y-1.5">
+          <h3 class="font-extrabold text-[#111b3b]">تقسيم المهام</h3>
+          <p class="text-xs text-[#475569] leading-relaxed">قسّم الدروس إلى مهام صغيرة محددة الوقت والأولوية.</p>
+        </div>
+        <div class="rounded-2xl bg-white border border-[#111b3b]/10 p-5 space-y-1.5">
+          <h3 class="font-extrabold text-[#111b3b]">التركيز العميق</h3>
+          <p class="text-xs text-[#475569] leading-relaxed">اعمل في فترات تركيز واضحة تتخللها استراحات منتظمة.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="tasks" class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-[#111b3b]">جدول المهام الدراسية</h2>
+      <ul class="space-y-2.5">
+          ${tasksPreviewHtml}
+      </ul>
+    </section>
+
+    <section id="cards" class="space-y-4">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-[#111b3b]">بطاقات الاستذكار النشط</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          ${cardsPreviewHtml}
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-[#111b3b] text-gray-300 py-8 px-4 text-center text-xs sm:text-sm">
+  </footer>
+</body>
+</html>`;
+      }
+
+      // =====================================================================
+      // INITIALIZATION & EVENT BINDINGS
+      // =====================================================================
+      document.addEventListener('DOMContentLoaded', () => {
+        applyBrandingAndTheme();
+        renderTasks();
+        syncTimerDurationsFromState(true);
+        renderFlashcards();
+        updateStatsDisplay();
+
+        // Mobile menu toggle
+        el.mobileNavToggle.addEventListener('click', () => {
+          const opening = el.mobileNavPanel.classList.contains('hidden');
+          el.mobileNavPanel.classList.toggle('hidden', !opening);
+          el.mobileNavToggle.setAttribute('aria-expanded', String(opening));
+        });
+
+        document.querySelectorAll('.mobile-link').forEach((link) => {
+          link.addEventListener('click', () => {
+            el.mobileNavPanel.classList.add('hidden');
+            el.mobileNavToggle.setAttribute('aria-expanded', 'false');
+          });
+        });
+
+        // Add task form
+        el.addTaskForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const title = el.taskTitleInput.value.trim();
+          const category = el.taskCategorySelect.value;
+          const priority = el.taskPrioritySelect.value;
+          const minutes = Math.max(5, parseInt(el.taskMinutesInput.value, 10) || 25);
+
+          if (!title) return;
+
+          state.tasks.unshift({
+            id: 'task-' + Date.now(),
+            title,
+            category,
+            priority,
+            minutes,
+            completed: false
+          });
+
+          saveState();
+          renderTasks();
+          el.addTaskForm.reset();
+          el.taskMinutesInput.value = '30';
+          el.taskPrioritySelect.value = 'متوسطة';
+        });
+
+        // Task filters
+        el.taskFilterBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            state.taskFilter = btn.getAttribute('data-task-filter');
+            renderTasks();
+          });
+        });
+
+        // Toggle & Delete tasks via delegation
+        el.tasksListContainer.addEventListener('change', (e) => {
+          const cb = e.target.closest('.task-checkbox');
+          if (!cb) return;
+          const id = cb.getAttribute('data-toggle-task');
+          const task = state.tasks.find((item) => item.id === id);
+          if (task) {
+            task.completed = cb.checked;
+            saveState();
+            renderTasks();
+          }
+        });
+
+        el.tasksListContainer.addEventListener('click', (e) => {
+          const delBtn = e.target.closest('.delete-task-btn');
+          if (!delBtn) return;
+          const id = delBtn.getAttribute('data-delete-task');
+          state.tasks = state.tasks.filter((item) => item.id !== id);
+          saveState();
+          renderTasks();
+        });
+
+        el.clearCompletedTasksBtn.addEventListener('click', () => {
+          state.tasks = state.tasks.filter((item) => !item.completed);
+          saveState();
+          renderTasks();
+        });
+
+        // Timer controls
+        el.timerToggleBtn.addEventListener('click', () => {
+          if (isTimerRunning) {
+            stopTimerInterval();
+            el.timerSubstatus.textContent = 'متوقف مؤقتاً';
+            renderTimerDisplay();
+          } else {
+            startTimer();
+          }
+        });
+
+        el.timerResetBtn.addEventListener('click', resetTimer);
+
+        el.timerSwitchModeBtn.addEventListener('click', () => {
+          stopTimerInterval();
+          timerMode = timerMode === 'focus' ? 'break' : 'focus';
+          totalSecondsForMode = getModeDurationSeconds();
+          remainingSeconds = totalSecondsForMode;
+          el.timerSubstatus.textContent = 'جاهز للبدء';
+          renderTimerDisplay();
+        });
+
+        el.presetBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const fMin = parseInt(btn.getAttribute('data-preset-focus'), 10) || 25;
+            const bMin = parseInt(btn.getAttribute('data-preset-break'), 10) || 5;
+            state.focusMinutes = fMin;
+            state.breakMinutes = bMin;
+            saveState();
+
+            el.presetBtns.forEach((b) => {
+              b.className = 'preset-btn py-2.5 px-3 rounded-xl bg-paper hover:bg-indigoSoft text-navyDeep font-bold text-xs sm:text-sm border border-navyDeep/15 transition-all cursor-pointer';
+            });
+            btn.className = 'preset-btn py-2.5 px-3 rounded-xl bg-navyDeep text-white font-extrabold text-xs sm:text-sm transition-all cursor-pointer';
+
+            syncTimerDurationsFromState(true);
+          });
+        });
+
+        el.customFocusMin.addEventListener('change', () => {
+          const val = Math.max(1, Math.min(180, parseInt(el.customFocusMin.value, 10) || 25));
+          state.focusMinutes = val;
+          saveState();
+          if (timerMode === 'focus') syncTimerDurationsFromState(true);
+        });
+
+        el.customBreakMin.addEventListener('change', () => {
+          const val = Math.max(1, Math.min(60, parseInt(el.customBreakMin.value, 10) || 5));
+          state.breakMinutes = val;
+          saveState();
+          if (timerMode === 'break') syncTimerDurationsFromState(true);
+        });
+
+        // Flashcards controls
+        el.toggleAddCardFormBtn.addEventListener('click', () => {
+          el.addCardPanel.classList.toggle('hidden');
+        });
+
+        el.cancelAddCardBtn.addEventListener('click', () => {
+          el.addCardPanel.classList.add('hidden');
+          el.addFlashcardForm.reset();
+        });
+
+        el.addFlashcardForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const topic = el.cardTopicSelect.value;
+          const front = el.cardFrontInput.value.trim();
+          const back = el.cardBackInput.value.trim();
+          if (!front || !back) return;
+
+          state.flashcards.unshift({
+            id: 'card-' + Date.now(),
+            topic,
+            front,
+            back,
+            status: 'review'
+          });
+
+          saveState();
+          renderFlashcards();
+          el.addFlashcardForm.reset();
+          el.addCardPanel.classList.add('hidden');
+        });
+
+        el.cardTopicBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            state.cardTopicFilter = btn.getAttribute('data-card-topic');
+            renderFlashcards();
+          });
+        });
+
+        el.flashcardsGrid.addEventListener('click', (e) => {
+          const flipTarget = e.target.closest('[data-flip-id]');
+          if (flipTarget) {
+            flipTarget.classList.toggle('is-flipped');
+            return;
+          }
+
+          const statusBtn = e.target.closest('.card-status-btn');
+          if (statusBtn) {
+            const id = statusBtn.getAttribute('data-status-id');
+            const nextStatus = statusBtn.getAttribute('data-next-status');
+            const card = state.flashcards.find((c) => c.id === id);
+            if (card) {
+              card.status = nextStatus;
+              saveState();
+              renderFlashcards();
+            }
+            return;
+          }
+
+          const delCardBtn = e.target.closest('.delete-card-btn');
+          if (delCardBtn) {
+            const id = delCardBtn.getAttribute('data-delete-card');
+            state.flashcards = state.flashcards.filter((c) => c.id !== id);
+            saveState();
+            renderFlashcards();
+          }
+        });
+
+        // Customization Drawer & Export actions
+        el.openDrawerBtn.addEventListener('click', () => setDrawerState(true));
+        el.closeDrawerBtn.addEventListener('click', () => setDrawerState(false));
+        el.drawerBackdrop.addEventListener('click', () => setDrawerState(false));
+
+        el.custPlatformTitle.addEventListener('input', (e) => {
+          state.platformTitle = e.target.value;
+          saveState();
+          applyBrandingAndTheme();
+        });
+
+        el.custStudentGreeting.addEventListener('input', (e) => {
+          state.greetingText = e.target.value;
+          saveState();
+          applyBrandingAndTheme();
+        });
+
+        el.themeChoiceBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            state.theme = btn.getAttribute('data-theme-choice') || 'amber';
+            saveState();
+            applyBrandingAndTheme();
+            renderTimerDisplay();
+          });
+        });
+
+        el.resetStudyDataBtn.addEventListener('click', () => {
+          stopTimerInterval();
+          state = cloneDefault();
+          saveState();
+          applyBrandingAndTheme();
+          renderTasks();
+          syncTimerDurationsFromState(true);
+          renderFlashcards();
+          updateStatsDisplay();
+          el.custPlatformTitle.value = state.platformTitle;
+          el.custStudentGreeting.value = state.greetingText;
+          showDrawerStatus('تمت إعادة تعيين البيانات الافتراضية.', false);
+        });
+
+        el.copyHtmlDirectBtn.addEventListener('click', () => {
+          try {
+            const tempArea = document.createElement('textarea');
+            tempArea.value = generateExportableHtml();
+            tempArea.setAttribute('readonly', '');
+            tempArea.style.position = 'fixed';
+            tempArea.style.opacity = '0';
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            const copied = document.execCommand('copy');
+            document.body.removeChild(tempArea);
+
+            if (copied) {
+              showDrawerStatus('تم نسخ كود HTML إلى الحافظة بنجاح!', false);
+            } else {
+              showDrawerStatus('تعذر النسخ التلقائي؛ جرّب تحميل ملف index.html مباشرة.', true);
+            }
+          } catch (err) {
+            showDrawerStatus('تعذر النسخ التلقائي في هذا المتصفح.', true);
+          }
+        });
+
+        el.downloadHtmlDirectBtn.addEventListener('click', () => {
+          try {
+            const blob = new Blob([generateExportableHtml()], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showDrawerStatus('تم تحميل ملف index.html بنجاح!', false);
+          } catch (err) {
+            showDrawerStatus('حدث خطأ أثناء تحميل الملف.', true);
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            setDrawerState(false);
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
